@@ -4,7 +4,7 @@ package cn.android.jkbd.bean;
  * Created by Administrator on 2017/6/28.
  */
 
-public class examInfo {
+public class ExamInfo {
 
     /**
      * subjectTitle : c1
