@@ -68,10 +68,18 @@ public class RandomExam extends AppCompatActivity {
     }
 
     public void nextQuestion(View view) {
+        /**
+         *
+         *
+         * 保持用户的答案
+         */
+
         number++;
+        setQuestion(list.get(number));
     }
 
     public void preQuestion(View view) {
         number--;
+        setQuestion(list.get(number));
     }
 }
