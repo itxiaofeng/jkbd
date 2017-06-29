@@ -1,10 +1,12 @@
 package cn.android.jkbd.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/6/28.
  */
 
-public class ExamInfo {
+public class ExamInfo implements Serializable{
 
     /**
      * subjectTitle : c1
@@ -51,7 +53,7 @@ public class ExamInfo {
     }
     @Override
     public String toString() {
-        return "开始科目：'" + subjectTitle + '\n' +
+        return "开始科目：" + subjectTitle + '\n' +
                 "考题数量：" + questionCount + '\n' +
                 "考试时间：" + limitTime + "分钟" ;
     }
