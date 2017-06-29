@@ -46,7 +46,7 @@ public class RandomExam extends AppCompatActivity {
         TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
         txv_examInfo.setText(examInfo.toString());
 
-
+        setQuestion(list.get(number));
 
 
     }
@@ -57,9 +57,9 @@ public class RandomExam extends AppCompatActivity {
 
             TextView txv_ans = (TextView) findViewById(R.id.txv_item);
             txv_ans.setText(
-                    "A."+qusetion.getItem1()+
-                    "B."+qusetion.getItem2()+
-                    "C."+qusetion.getItem3()+
+                    "A."+qusetion.getItem1()+ "\n" +
+                    "B."+qusetion.getItem2()+ "\n" +
+                    "C."+qusetion.getItem3()+ "\n" +
                     "D."+qusetion.getItem4()
             );
 
@@ -68,9 +68,10 @@ public class RandomExam extends AppCompatActivity {
     }
 
     public void nextQuestion(View view) {
-
+        number++;
     }
 
     public void preQuestion(View view) {
+        number--;
     }
 }
