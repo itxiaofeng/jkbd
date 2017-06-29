@@ -49,4 +49,10 @@ public class ExamInfo {
     public void setQuestionCount(int questionCount) {
         this.questionCount = questionCount;
     }
+    @Override
+    public String toString() {
+        return "开始科目：'" + subjectTitle + '\n' +
+                "考题数量：" + questionCount + '\n' +
+                "考试时间：" + limitTime + "分钟" ;
+    }
 }
