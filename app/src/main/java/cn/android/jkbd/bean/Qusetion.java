@@ -1,10 +1,12 @@
 package cn.android.jkbd.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/6/28.
  */
 
-public class Qusetion {
+public class Qusetion implements Serializable{
     /**
      * id : 9
      * question : 这个标志是何含义？

@@ -1,12 +1,13 @@
 package cn.android.jkbd.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/6/28.
  */
 
-public class Result {
+public class Result implements Serializable{
 
     /**
      * error_code : 0
