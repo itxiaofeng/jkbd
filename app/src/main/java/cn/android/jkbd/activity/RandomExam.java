@@ -18,9 +18,9 @@ public class RandomExam extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        this.txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
+        /*this.txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
         this.txv_examInfo.setText("开始科目：0000"  + '\n' +
                 "考题数量：000"  + '\n' +
-                "考试时间：000"  + "分钟" );
+                "考试时间：000"  + "分钟" );*/
     }
 }
