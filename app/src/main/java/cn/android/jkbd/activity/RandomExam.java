@@ -7,7 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -29,7 +33,7 @@ public class RandomExam extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        //ExamApplication.getInstance().onCreate();
+        ExamApplication.getInstance().onCreate();
         initData();
    /*
         Intent intent = this.getIntent();
@@ -67,6 +71,12 @@ public class RandomExam extends AppCompatActivity {
         if(qusetion!=null){
             TextView txv_ques = (TextView) findViewById(R.id.txv_question);
            txv_ques.setText(number+"."+qusetion.getQuestion());
+
+
+            ImageView image = (ImageView) findViewById(R.id.image);
+            //这里就是加载图片的代码
+           Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
+
             TextView txv_ans = (TextView) findViewById(R.id.txv_item);
             txv_ans.setText(
                     "A."+qusetion.getItem1()+ "\n" +
