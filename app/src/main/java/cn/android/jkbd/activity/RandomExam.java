@@ -33,7 +33,7 @@ public class RandomExam extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        ExamApplication.getInstance().onCreate();
+        //ExamApplication.getInstance().onCreate();
         initData();
    /*
         Intent intent = this.getIntent();
