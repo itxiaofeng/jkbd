@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -33,7 +35,6 @@ public class RandomExam extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        //ExamApplication.getInstance().onCreate();
         initData();
    /*
         Intent intent = this.getIntent();
@@ -54,6 +55,8 @@ public class RandomExam extends AppCompatActivity {
     }
 
     private void initData() {
+
+
         ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
         if(examInfo!=null){
             TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
@@ -75,8 +78,8 @@ public class RandomExam extends AppCompatActivity {
 
             ImageView image = (ImageView) findViewById(R.id.image);
             //这里就是加载图片的代码
-           Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
-
+           //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
+            Picasso.with(RandomExam.this).load(qusetion.getUrl()).into(image);
             TextView txv_ans = (TextView) findViewById(R.id.txv_item);
             txv_ans.setText(
                     "A."+qusetion.getItem1()+ "\n" +
@@ -91,7 +94,7 @@ public class RandomExam extends AppCompatActivity {
 
     public void nextQuestion(View view) {
          //保持用户的答案
-       number++;
+        number++;
         setQuestion(examQuelist.get(number));
     }
 

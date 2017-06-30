@@ -29,34 +29,12 @@ public class ExamApplication extends Application {
                return istance;
     }
     private void intiData() {
-        OkHttpUtils<ExamInfo> until=new OkHttpUtils<>(istance);
-        String uri="http://101.251.196.90:8080/JztkServer/examInfo";
-        until.url(uri).targetClass(ExamInfo.class).execute(new OkHttpUtils.OnCompleteListener<ExamInfo>() {
-            @Override
-            public void onSuccess(ExamInfo result) {
-                    Log.e("Application","result="+result);
-                    examInfo=result;
-            }
-            @Override
-            public void onError(String error) {
-                    Log.e("main","error="+error);
-            }
-        });
 
-        OkHttpUtils<Result> resUntil = new OkHttpUtils<>(istance);
-        String queUrl ="http://101.251.196.90:8080/JztkServer/getQuestions?testType=rand";
-        resUntil.url(queUrl).targetClass(Result.class).execute(new OkHttpUtils.OnCompleteListener<Result>() {
+        new Thread(new Runnable() {
             @Override
-            public void onSuccess(Result result) {
-                Log.e("Application","result="+result.getReason());
-                examQueList = result.getResult();
+            public void run() {
             }
-
-            @Override
-            public void onError(String error) {
-                Log.e("main","error="+error);
-            }
-        });
+        }).start();
 
     }
 
