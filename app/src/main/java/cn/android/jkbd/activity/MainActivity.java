@@ -20,8 +20,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void exam(View view) {
-
-        final OkHttpUtils<ExamInfo> okHttpUtils = new OkHttpUtils<>(getApplicationContext());
+        Intent intent = new Intent(MainActivity.this,RandomExam.class);
+        startActivity(intent);
+      /*  final OkHttpUtils<ExamInfo> okHttpUtils = new OkHttpUtils<>(getApplicationContext());
         String ExamInfoUrl = "http://101.251.196.90:8080/JztkServer/examInfo";
         okHttpUtils.url(ExamInfoUrl).targetClass(ExamInfo.class).execute(new OkHttpUtils.OnCompleteListener<ExamInfo>() {
                     @Override
@@ -47,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         });
-                        /*Log.e("main","result = "+result);
+                        //Log.e("main","result = "+result);
 
-                        ExamInfo  examInfo = (ExamInfo) result;
-                        Intent intent = new Intent(MainActivity.this,RandomExam.class);
-                        intent.putExtra("ExamInfo",examInfo);
-                        startActivity(intent);*/
+                       // ExamInfo  examInfo = (ExamInfo) result;
+                        //Intent intent = new Intent(MainActivity.this,RandomExam.class);
+                        //intent.putExtra("ExamInfo",examInfo);
+                        //startActivity(intent);
                     }
 
                     @Override
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("main","error = "+error);
 
                     }
-                });
+                });*/
     }
+
 }

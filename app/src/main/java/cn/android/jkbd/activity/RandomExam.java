@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.android.jkbd.ExamApplication;
 import cn.android.jkbd.R;
 import cn.android.jkbd.bean.ExamInfo;
 import cn.android.jkbd.bean.Qusetion;
@@ -21,19 +22,18 @@ import cn.android.jkbd.bean.Result;
  */
 
 public class RandomExam extends AppCompatActivity {
-    private int number=0;
-    private Result result;
+   private int number=0;
     private ExamInfo examInfo;
-    private List<Qusetion> list;
+    private List<Qusetion> examQuelist;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-
+        //ExamApplication.getInstance().onCreate();
+        initData();
+   /*
         Intent intent = this.getIntent();
-        /*
-        获取avtivity间传的值
-         */
+        //获取avtivity间传的值
         examInfo= (ExamInfo)getIntent().getSerializableExtra("examInfo");
         result = (Result)getIntent().getSerializableExtra("result") ;
         if(examInfo==null || result==null){
@@ -41,20 +41,32 @@ public class RandomExam extends AppCompatActivity {
             return;
         }
         list = result.getResult();
-        /*初始化赋值*/
-
+        //初始化赋值
         TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
         txv_examInfo.setText(examInfo.toString());
-
         setQuestion(list.get(number));
-
+*/
 
     }
+
+    private void initData() {
+        ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
+        if(examInfo!=null){
+            TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
+            txv_examInfo.setText(examInfo.toString());
+        }
+        examQuelist = ExamApplication.getInstance().getExamQueList();
+        if(examQuelist!=null){
+            setQuestion(examQuelist.get(number));
+        }
+    }
+
+    
+
     protected boolean setQuestion(Qusetion qusetion){
         if(qusetion!=null){
             TextView txv_ques = (TextView) findViewById(R.id.txv_question);
-            txv_ques.setText(number+"."+list.get(number).getQuestion());
-
+           txv_ques.setText(number+"."+qusetion.getQuestion());
             TextView txv_ans = (TextView) findViewById(R.id.txv_item);
             txv_ans.setText(
                     "A."+qusetion.getItem1()+ "\n" +
@@ -68,18 +80,13 @@ public class RandomExam extends AppCompatActivity {
     }
 
     public void nextQuestion(View view) {
-        /**
-         *
-         *
-         * 保持用户的答案
-         */
-
-        number++;
-        setQuestion(list.get(number));
+         //保持用户的答案
+       number++;
+        setQuestion(examQuelist.get(number));
     }
 
     public void preQuestion(View view) {
-        number--;
-        setQuestion(list.get(number));
+       number--;
+        setQuestion(examQuelist.get(number));
     }
 }
