@@ -1,5 +1,6 @@
 package cn.android.jkbd.dao;
 
+import android.content.Intent;
 import android.util.Log;
 
 import cn.android.jkbd.ExamApplication;
@@ -21,10 +22,14 @@ public class ExamDao implements IExamDao {
             public void onSuccess(ExamInfo result) {
                 Log.e("Application","result="+result);
                 ExamApplication.getInstance().setExamInfo(result);
+                ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_INFO)
+                .putExtra(ExamApplication.LOAD_DATA_SUCCESS,true));
             }
             @Override
             public void onError(String error) {
                 Log.e("main","error="+error);
+                ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_INFO)
+                        .putExtra(ExamApplication.LOAD_DATA_SUCCESS,false));
             }
         });
     }
@@ -36,13 +41,21 @@ public class ExamDao implements IExamDao {
         resUntil.url(queUrl).targetClass(Result.class).execute(new OkHttpUtils.OnCompleteListener<Result>() {
             @Override
             public void onSuccess(Result result) {
+                boolean success=false;
                 Log.e("Application","result="+result.getReason());
-                ExamApplication.getInstance().setExamQueList(result.getResult());
+                if(result!=null && result.getError_code()==0){
+                    ExamApplication.getInstance().setExamQueList(result.getResult());
+                   success = true;
+                }
+                ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_QUERSTON)
+                        .putExtra(ExamApplication.LOAD_DATA_SUCCESS,success));
             }
 
             @Override
             public void onError(String error) {
                 Log.e("main","error="+error);
+                ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_QUERSTON)
+                        .putExtra(ExamApplication.LOAD_DATA_SUCCESS,false));
             }
         });
     }

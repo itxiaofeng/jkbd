@@ -1,6 +1,9 @@
 package cn.android.jkbd.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -22,49 +25,56 @@ import cn.android.jkbd.R;
 import cn.android.jkbd.bean.ExamInfo;
 import cn.android.jkbd.bean.Qusetion;
 import cn.android.jkbd.bean.Result;
+import cn.android.jkbd.biz.ExamBiz;
+import cn.android.jkbd.biz.IExamBiz;
 
 /**
  * Created by Administrator on 2017/6/29.
  */
 
 public class RandomExam extends AppCompatActivity {
-   private int number=0;
-    private ExamInfo examInfo;
-    private List<Qusetion> examQuelist;
+    int number = 0;
+    IExamBiz biz;
+    boolean isLoadExamInfo = false;
+    boolean isLoadQuestions = false;
+    //LoadExamBroadcast mLoadExamBroadcast;
+    //LoadQuestionBroadcast mLoadQuestionBroadcast;
+    LoadBroadcast mLoadBroadcast;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        initData();
-   /*
-        Intent intent = this.getIntent();
-        //获取avtivity间传的值
-        examInfo= (ExamInfo)getIntent().getSerializableExtra("examInfo");
-        result = (Result)getIntent().getSerializableExtra("result") ;
-        if(examInfo==null || result==null){
-            Log.e("Exam","页面传值为空，出现异常");
-            return;
-        }
-        list = result.getResult();
-        //初始化赋值
-        TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
-        txv_examInfo.setText(examInfo.toString());
-        setQuestion(list.get(number));
-*/
+        mLoadBroadcast = new LoadBroadcast();
+        loadData();
+        setListener();
+    }
 
+    private void setListener() {
+        registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_QUERSTON));
+    }
+
+    private void loadData() {
+        biz = new ExamBiz();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                biz.beginExam();
+            }
+        }).start();
     }
 
     private void initData() {
+       if(isLoadExamInfo && isLoadQuestions){
+            ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
+            if(examInfo!=null){
+                TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
+                txv_examInfo.setText(examInfo.toString());
 
-
-        ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
-        if(examInfo!=null){
-            TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
-            txv_examInfo.setText(examInfo.toString());
-        }
-        examQuelist = ExamApplication.getInstance().getExamQueList();
-        if(examQuelist!=null){
-            setQuestion(examQuelist.get(number));
+            }
+           List<Qusetion> examQuelist = ExamApplication.getInstance().getExamQueList();
+            if(examQuelist!=null){
+                setQuestion(examQuelist.get(number));
+            }
         }
     }
 
@@ -73,7 +83,7 @@ public class RandomExam extends AppCompatActivity {
     protected boolean setQuestion(Qusetion qusetion){
         if(qusetion!=null){
             TextView txv_ques = (TextView) findViewById(R.id.txv_question);
-           txv_ques.setText(number+"."+qusetion.getQuestion());
+           txv_ques.setText(number + 1 +"."+qusetion.getQuestion());
 
 
             ImageView image = (ImageView) findViewById(R.id.image);
@@ -87,19 +97,36 @@ public class RandomExam extends AppCompatActivity {
                     "C."+qusetion.getItem3()+ "\n" +
                     "D."+qusetion.getItem4()
             );
-
         }
         return false;
     }
 
     public void nextQuestion(View view) {
-         //保持用户的答案
-        number++;
-        setQuestion(examQuelist.get(number));
+
     }
 
     public void preQuestion(View view) {
-       number--;
-        setQuestion(examQuelist.get(number));
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mLoadBroadcast!=null){
+            unregisterReceiver(mLoadBroadcast);
+        }
+    }
+
+    class LoadBroadcast extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSuccess = intent.getBooleanExtra(ExamApplication.LOAD_DATA_SUCCESS,false);
+            Log.e("LoadBroadcast","LoadBroadcast isSuccess = "+isSuccess);
+            if(isSuccess){
+                isLoadExamInfo = true;
+                isLoadQuestions = true;
+            }
+            initData();
+        }
     }
 }
