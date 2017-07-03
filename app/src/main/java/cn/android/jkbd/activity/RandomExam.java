@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 
@@ -41,7 +42,7 @@ public class RandomExam extends AppCompatActivity {
     TextView txv_examInfo,txv_ques,txv_ans,txv_load;
     ImageView image;
     ProgressBar dialog;
-    int number = 0;
+    RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
@@ -69,6 +70,10 @@ public class RandomExam extends AppCompatActivity {
         txv_ques = (TextView) findViewById(R.id.txv_question);
         image = (ImageView) findViewById(R.id.image);
         txv_ans = (TextView) findViewById(R.id.txv_item);
+        rdobtn_a = (RadioButton) findViewById(R.id.rdobtn_a);
+        rdobtn_b = (RadioButton) findViewById(R.id.rdobtn_b);
+        rdobtn_c = (RadioButton) findViewById(R.id.rdobtn_c);
+        rdobtn_d = (RadioButton) findViewById(R.id.rdobtn_d);
         layoutLoading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,11 +131,22 @@ public class RandomExam extends AppCompatActivity {
             }else{
                 image.setVisibility(View.GONE);
             }
+            Log.e("Question" ,"que"+qusetion);
+            rdobtn_c.setVisibility(View.GONE);
+            rdobtn_d.setVisibility(View.GONE);
+            String c="",d="";
+            if(qusetion.getItem3()!=""){
+                c = "C."+qusetion.getItem3() + "\n";
+                rdobtn_c.setVisibility(View.VISIBLE);
+            }
+            if(qusetion.getItem4()!=""){
+                d = "D."+qusetion.getItem4();
+                rdobtn_d.setVisibility(View.VISIBLE);
+            }
             txv_ans.setText(
                     "A."+qusetion.getItem1()+ "\n" +
                     "B."+qusetion.getItem2()+ "\n" +
-                    "C."+qusetion.getItem3()+ "\n" +
-                    "D."+qusetion.getItem4()
+                    c + d
             );
         }
         return false;
