@@ -6,15 +6,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
@@ -43,6 +46,7 @@ public class RandomExam extends AppCompatActivity {
     ImageView image;
     ProgressBar dialog;
     RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
+    RadioGroup radioGroup;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
@@ -74,12 +78,35 @@ public class RandomExam extends AppCompatActivity {
         rdobtn_b = (RadioButton) findViewById(R.id.rdobtn_b);
         rdobtn_c = (RadioButton) findViewById(R.id.rdobtn_c);
         rdobtn_d = (RadioButton) findViewById(R.id.rdobtn_d);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         layoutLoading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadData();
             }
         });
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                int userAnswer = 0;
+                switch (checkedId) {
+                    case R.id.rdobtn_a:
+                        userAnswer = 1;
+                    break;
+                    case R.id.rdobtn_b:
+                        userAnswer = 2;
+                        break;
+                    case R.id.rdobtn_c:
+                        userAnswer = 3;
+                        break;
+                    case R.id.rdobtn_d:
+                        userAnswer = 4;
+                        break;
+                }
+
+            }
+        });
+
     }
 
     private void setListener() {
