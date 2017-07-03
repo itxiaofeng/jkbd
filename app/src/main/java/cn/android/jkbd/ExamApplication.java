@@ -19,7 +19,8 @@ import cn.android.jkbd.utils.OkHttpUtils;
 public class ExamApplication extends Application {
     public static String LOAD_EXAM_INFO="load_exam_info";
     public static String LOAD_EXAM_QUERSTON="load_exam_question";
-    public static String LOAD_DATA_SUCCESS="load_data_seccess";
+    public static String LOAD_DATA_EXAM_SUCCESS="load_data_exam_seccess";
+    public static String LOAD_DATA_QUESTION_SUCCESS="load_data_question_seccess";
     ExamInfo examInfo;
     List<Qusetion> examQueList;
     private static ExamApplication istance;

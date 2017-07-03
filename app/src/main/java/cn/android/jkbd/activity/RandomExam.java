@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import cn.android.jkbd.ExamApplication;
 import cn.android.jkbd.R;
@@ -44,12 +46,15 @@ public class RandomExam extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
+
         mLoadBroadcast = new LoadBroadcast();
-        loadData();
         setListener();
+        loadData();
     }
 
     private void setListener() {
+
+        registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_INFO));
         registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_QUERSTON));
     }
 
@@ -117,13 +122,23 @@ public class RandomExam extends AppCompatActivity {
         }
     }
 
-    class LoadBroadcast extends BroadcastReceiver{
+    class LoadBroadcast extends BroadcastReceiver {
+        boolean isSuccessExam = false;
+        boolean isSuccessQuestion = false;
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isSuccess = intent.getBooleanExtra(ExamApplication.LOAD_DATA_SUCCESS,false);
-            Log.e("LoadBroadcast","LoadBroadcast isSuccess = "+isSuccess);
-            if(isSuccess){
+            if(isSuccessExam!=true){
+                isSuccessExam = intent.getBooleanExtra(ExamApplication.LOAD_DATA_EXAM_SUCCESS, false);
+            }
+            if(isSuccessQuestion!=true){
+                isSuccessQuestion = intent.getBooleanExtra(ExamApplication.LOAD_DATA_QUESTION_SUCCESS, false);
+            }
+            Log.e("LoadBroadcast", "isSuccessExam = " + isSuccessExam);
+            Log.e("LoadBroadcast", "isSuccessQuestion = " + isSuccessQuestion);
+            if (isSuccessExam) {
                 isLoadExamInfo = true;
+            }
+            if (isSuccessQuestion) {
                 isLoadQuestions = true;
             }
             initData();

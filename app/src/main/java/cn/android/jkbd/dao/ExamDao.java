@@ -20,16 +20,16 @@ public class ExamDao implements IExamDao {
         until.url(uri).targetClass(ExamInfo.class).execute(new OkHttpUtils.OnCompleteListener<ExamInfo>() {
             @Override
             public void onSuccess(ExamInfo result) {
-                Log.e("Application","result="+result);
+                Log.e("Application","ExamResult="+result);
                 ExamApplication.getInstance().setExamInfo(result);
                 ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_INFO)
-                .putExtra(ExamApplication.LOAD_DATA_SUCCESS,true));
+                .putExtra(ExamApplication.LOAD_DATA_EXAM_SUCCESS,true));
             }
             @Override
             public void onError(String error) {
-                Log.e("main","error="+error);
+                Log.e("Application","error="+error);
                 ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_INFO)
-                        .putExtra(ExamApplication.LOAD_DATA_SUCCESS,false));
+                        .putExtra(ExamApplication.LOAD_DATA_EXAM_SUCCESS,false));
             }
         });
     }
@@ -42,20 +42,20 @@ public class ExamDao implements IExamDao {
             @Override
             public void onSuccess(Result result) {
                 boolean success=false;
-                Log.e("Application","result="+result.getReason());
+                Log.e("Application","Questionresult="+result);
                 if(result!=null && result.getError_code()==0){
                     ExamApplication.getInstance().setExamQueList(result.getResult());
                    success = true;
                 }
                 ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_QUERSTON)
-                        .putExtra(ExamApplication.LOAD_DATA_SUCCESS,success));
+                        .putExtra(ExamApplication.LOAD_DATA_QUESTION_SUCCESS,success));
             }
 
             @Override
             public void onError(String error) {
-                Log.e("main","error="+error);
+                Log.e("Application","error="+error);
                 ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_QUERSTON)
-                        .putExtra(ExamApplication.LOAD_DATA_SUCCESS,false));
+                        .putExtra(ExamApplication.LOAD_DATA_QUESTION_SUCCESS,false));
             }
         });
     }

@@ -108,4 +108,20 @@ public class Qusetion implements Serializable{
     public void setUserAnswer(String userAnswer) {
         UserAnswer = userAnswer;
     }
+
+    @Override
+    public String toString() {
+        return "Qusetion{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                ", item1='" + item1 + '\'' +
+                ", item2='" + item2 + '\'' +
+                ", item3='" + item3 + '\'' +
+                ", item4='" + item4 + '\'' +
+                ", explains='" + explains + '\'' +
+                ", url='" + url + '\'' +
+                ", UserAnswer='" + UserAnswer + '\'' +
+                '}';
+    }
 }

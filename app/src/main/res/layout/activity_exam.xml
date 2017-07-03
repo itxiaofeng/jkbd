@@ -130,7 +130,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/btn_next"
             android:background="@null"
-            android:drawableLeft="@mipmap/exam_commit32x32"
+            android:drawableRight="@mipmap/exam_commit32x32"
             android:text="交卷" />
     </RelativeLayout>
 </LinearLayout>

@@ -43,4 +43,12 @@ public class Result implements Serializable{
         this.result = result;
     }
 
+    @Override
+    public String toString() {
+        return "Result{" +
+                "error_code=" + error_code +
+                ", reason='" + reason + '\'' +
+                ", result=" + result +
+                '}';
+    }
 }
