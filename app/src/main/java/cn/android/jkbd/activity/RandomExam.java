@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -35,25 +36,39 @@ import cn.android.jkbd.biz.IExamBiz;
  */
 
 public class RandomExam extends AppCompatActivity {
+    LinearLayout layoutLoading;
+    TextView txv_examInfo,txv_ques,txv_ans,txv_load;
+    ImageView image;
+
     int number = 0;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
-    //LoadExamBroadcast mLoadExamBroadcast;
-    //LoadQuestionBroadcast mLoadQuestionBroadcast;
+    boolean isLoadExamInfoReceiver = false;
+    boolean isLoadQuestionsReceiver = false;
+
     LoadBroadcast mLoadBroadcast;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-
+        initView();
         mLoadBroadcast = new LoadBroadcast();
         setListener();
         loadData();
     }
 
-    private void setListener() {
+    private void initView() {
 
+        layoutLoading = (LinearLayout) findViewById(R.id.layout_loading);
+        txv_load = (TextView) findViewById(R.id.txv_load);
+        txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
+        txv_ques = (TextView) findViewById(R.id.txv_question);
+        image = (ImageView) findViewById(R.id.image);
+        txv_ans = (TextView) findViewById(R.id.txv_item);
+    }
+
+    private void setListener() {
         registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_INFO));
         registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_QUERSTON));
     }
@@ -69,17 +84,21 @@ public class RandomExam extends AppCompatActivity {
     }
 
     private void initData() {
-       if(isLoadExamInfo && isLoadQuestions){
-            ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
-            if(examInfo!=null){
-                TextView txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
-                txv_examInfo.setText(examInfo.toString());
+        if(isLoadExamInfoReceiver && isLoadQuestionsReceiver){
+            if(isLoadExamInfo && isLoadQuestions){
+               layoutLoading.setVisibility(View.GONE);
+                ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
+                if(examInfo!=null){
+                    txv_examInfo.setText(examInfo.toString());
+                }
+               List<Qusetion> examQuelist = ExamApplication.getInstance().getExamQueList();
+                if(examQuelist!=null){
+                    setQuestion(examQuelist.get(number));
+                }
+            }
 
-            }
-           List<Qusetion> examQuelist = ExamApplication.getInstance().getExamQueList();
-            if(examQuelist!=null){
-                setQuestion(examQuelist.get(number));
-            }
+        }else {
+            txv_load.setText("下载失败，点击页面空白处重新下载！");
         }
     }
 
@@ -87,15 +106,10 @@ public class RandomExam extends AppCompatActivity {
 
     protected boolean setQuestion(Qusetion qusetion){
         if(qusetion!=null){
-            TextView txv_ques = (TextView) findViewById(R.id.txv_question);
            txv_ques.setText(number + 1 +"."+qusetion.getQuestion());
-
-
-            ImageView image = (ImageView) findViewById(R.id.image);
             //这里就是加载图片的代码
            //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
             Picasso.with(RandomExam.this).load(qusetion.getUrl()).into(image);
-            TextView txv_ans = (TextView) findViewById(R.id.txv_item);
             txv_ans.setText(
                     "A."+qusetion.getItem1()+ "\n" +
                     "B."+qusetion.getItem2()+ "\n" +
@@ -133,6 +147,11 @@ public class RandomExam extends AppCompatActivity {
             if(isSuccessQuestion!=true){
                 isSuccessQuestion = intent.getBooleanExtra(ExamApplication.LOAD_DATA_QUESTION_SUCCESS, false);
             }
+            if(ExamApplication.LOAD_DATA_EXAM_SUCCESS!=null)
+                isLoadQuestionsReceiver = true;
+            if(ExamApplication.LOAD_DATA_QUESTION_SUCCESS!=null)
+                isLoadExamInfoReceiver = true;
+            Log.e("LoadBroadcast","isLoadQuestionsReceiver = "+isLoadQuestionsReceiver+"   isLoadExamInfoReceiver = "+isLoadExamInfoReceiver);
             Log.e("LoadBroadcast", "isSuccessExam = " + isSuccessExam);
             Log.e("LoadBroadcast", "isSuccessQuestion = " + isSuccessQuestion);
             if (isSuccessExam) {

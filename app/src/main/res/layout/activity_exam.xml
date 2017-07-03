@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/main">
-<LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
->
+    android:background="@mipmap/main">
 
+    <LinearLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txv_load"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下载数据中…"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:gravity="center"
+            />
+    </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,36 +85,40 @@
         android:layout_gravity="center"
         android:layout_margin="20dp">
 
-        <CheckBox
-            android:id="@+id/ckb_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="A" />
+<RadioGroup
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+    <RadioButton
+        android:id="@+id/rdobtn_a"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="A" />
+    <RadioButton
+        android:id="@+id/rdobtn_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="B" />
+    <RadioButton
+        android:id="@+id/rdobtn_c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="C" />
+    <RadioButton
+        android:id="@+id/rdobtn_d"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="D" />
+</RadioGroup>
 
-        <CheckBox
-            android:id="@+id/ckb_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="B" />
-
-        <CheckBox
-            android:id="@+id/ckb_c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="C" />
-
-        <CheckBox
-            android:id="@+id/ckb_d"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="D" />
     </LinearLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -134,4 +155,3 @@
             android:text="交卷" />
     </RelativeLayout>
 </LinearLayout>
-    </ScrollView>
