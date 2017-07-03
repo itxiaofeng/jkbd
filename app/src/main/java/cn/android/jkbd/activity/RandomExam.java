@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -39,7 +40,7 @@ public class RandomExam extends AppCompatActivity {
     LinearLayout layoutLoading;
     TextView txv_examInfo,txv_ques,txv_ans,txv_load;
     ImageView image;
-
+    ProgressBar dialog;
     int number = 0;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
@@ -54,6 +55,7 @@ public class RandomExam extends AppCompatActivity {
         setContentView(R.layout.activity_exam);
         initView();
         mLoadBroadcast = new LoadBroadcast();
+        biz = new ExamBiz();
         setListener();
         loadData();
     }
@@ -62,10 +64,17 @@ public class RandomExam extends AppCompatActivity {
 
         layoutLoading = (LinearLayout) findViewById(R.id.layout_loading);
         txv_load = (TextView) findViewById(R.id.txv_load);
+        dialog = (ProgressBar) findViewById(R.id.dialog);
         txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
         txv_ques = (TextView) findViewById(R.id.txv_question);
         image = (ImageView) findViewById(R.id.image);
         txv_ans = (TextView) findViewById(R.id.txv_item);
+        layoutLoading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadData();
+            }
+        });
     }
 
     private void setListener() {
@@ -74,7 +83,9 @@ public class RandomExam extends AppCompatActivity {
     }
 
     private void loadData() {
-        biz = new ExamBiz();
+        layoutLoading.setEnabled(false);
+        dialog.setVisibility(View.VISIBLE);
+        txv_load.setText("下载数据中...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -96,6 +107,8 @@ public class RandomExam extends AppCompatActivity {
                     setQuestion(examQuelist.get(number));
                 }
             }else {
+                layoutLoading.setEnabled(true);
+                dialog.setVisibility(View.GONE);
                 txv_load.setText("下载失败，点击页面空白处重新下载！");
             }
 
