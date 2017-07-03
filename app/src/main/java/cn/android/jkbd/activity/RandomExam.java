@@ -95,10 +95,10 @@ public class RandomExam extends AppCompatActivity {
                 if(examQuelist!=null){
                     setQuestion(examQuelist.get(number));
                 }
+            }else {
+                txv_load.setText("下载失败，点击页面空白处重新下载！");
             }
 
-        }else {
-            txv_load.setText("下载失败，点击页面空白处重新下载！");
         }
     }
 
@@ -146,14 +146,18 @@ public class RandomExam extends AppCompatActivity {
             }
             if(isSuccessQuestion!=true){
                 isSuccessQuestion = intent.getBooleanExtra(ExamApplication.LOAD_DATA_QUESTION_SUCCESS, false);
+
             }
-            if(ExamApplication.LOAD_DATA_EXAM_SUCCESS!=null)
-                isLoadQuestionsReceiver = true;
-            if(ExamApplication.LOAD_DATA_QUESTION_SUCCESS!=null)
+            if(intent.getAction().equals(ExamApplication.LOAD_EXAM_INFO)){
                 isLoadExamInfoReceiver = true;
-            Log.e("LoadBroadcast","isLoadQuestionsReceiver = "+isLoadQuestionsReceiver+"   isLoadExamInfoReceiver = "+isLoadExamInfoReceiver);
+            }
+            if(intent.getAction().equals(ExamApplication.LOAD_EXAM_QUERSTON)){
+                isLoadQuestionsReceiver = true;
+            }
             Log.e("LoadBroadcast", "isSuccessExam = " + isSuccessExam);
             Log.e("LoadBroadcast", "isSuccessQuestion = " + isSuccessQuestion);
+            Log.e("LoadBroadcast","isLoadQuestionsReceiver = "+isLoadQuestionsReceiver+"   isLoadExamInfoReceiver = "+isLoadExamInfoReceiver);
+            Log.e("intent.getAction()",intent.getAction());
             if (isSuccessExam) {
                 isLoadExamInfo = true;
             }
