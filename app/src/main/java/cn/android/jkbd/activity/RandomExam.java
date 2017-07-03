@@ -99,13 +99,10 @@ public class RandomExam extends AppCompatActivity {
             if(isLoadExamInfo && isLoadQuestions){
                layoutLoading.setVisibility(View.GONE);
                 ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
-                if(examInfo!=null){
+                if(examInfo!=null) {
                     txv_examInfo.setText(examInfo.toString());
                 }
-               List<Qusetion> examQuelist = ExamApplication.getInstance().getExamQueList();
-                if(examQuelist!=null){
-                    setQuestion(examQuelist.get(number));
-                }
+                    setQuestion(biz.getQuestion());
             }else {
                 layoutLoading.setEnabled(true);
                 dialog.setVisibility(View.GONE);
@@ -119,10 +116,16 @@ public class RandomExam extends AppCompatActivity {
 
     protected boolean setQuestion(Qusetion qusetion){
         if(qusetion!=null){
-           txv_ques.setText(number + 1 +"."+qusetion.getQuestion());
+
+           txv_ques.setText(biz.getIndex() + 1 +"."+qusetion.getQuestion());
             //这里就是加载图片的代码
            //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
-            Picasso.with(RandomExam.this).load(qusetion.getUrl()).into(image);
+            if(qusetion.getUrl()!=null && !qusetion.getUrl().equals("")){
+                image.setVisibility(View.VISIBLE);
+                Picasso.with(RandomExam.this).load(qusetion.getUrl()).into(image);
+            }else{
+                image.setVisibility(View.GONE);
+            }
             txv_ans.setText(
                     "A."+qusetion.getItem1()+ "\n" +
                     "B."+qusetion.getItem2()+ "\n" +
@@ -134,11 +137,11 @@ public class RandomExam extends AppCompatActivity {
     }
 
     public void nextQuestion(View view) {
-
+        setQuestion(biz.nextQuestion());
     }
 
     public void preQuestion(View view) {
-
+        setQuestion(biz.preQuestion());
     }
 
     @Override
