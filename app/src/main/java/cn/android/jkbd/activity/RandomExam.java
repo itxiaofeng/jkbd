@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 //import com.bumptech.glide.Glide;
@@ -48,10 +49,12 @@ public class RandomExam extends AppCompatActivity {
     RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
     RadioGroup radioGroup;
     IExamBiz biz;
+    String userAnswer="";
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
     boolean isLoadExamInfoReceiver = false;
     boolean isLoadQuestionsReceiver = false;
+
     LoadBroadcast mLoadBroadcast;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,22 +90,21 @@ public class RandomExam extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                int userAnswer = 0;
                 switch (checkedId) {
                     case R.id.rdobtn_a:
-                        userAnswer = 1;
+                        userAnswer = "1";
                     break;
                     case R.id.rdobtn_b:
-                        userAnswer = 2;
+                        userAnswer = "2";
                         break;
                     case R.id.rdobtn_c:
-                        userAnswer = 3;
+                        userAnswer = "3";
                         break;
                     case R.id.rdobtn_d:
-                        userAnswer = 4;
+                        userAnswer = "4";;
                         break;
                 }
-
+                Log.e("OnCheckedChangeListener","   onCheckedChanged userAnswer = " + userAnswer);
             }
         });
 
@@ -145,10 +147,8 @@ public class RandomExam extends AppCompatActivity {
 
     
 
-    protected boolean setQuestion(Qusetion qusetion){
-
+    protected void setQuestion(Qusetion qusetion){
         if(qusetion!=null){
-            resetOptions();
            txv_ques.setText(biz.getIndex() + 1 +"."+qusetion.getQuestion());
             //这里就是加载图片的代码
            //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
@@ -176,7 +176,34 @@ public class RandomExam extends AppCompatActivity {
                     c + d
             );
         }
-        return false;
+        String userChoice = qusetion.getUserAnswer();
+        Log.e("setQuestion","   setQuestion userChoice = " + userChoice);
+        if(userChoice!=null && !userChoice.equals("")){
+            userAnswer = userChoice;
+            switch (userAnswer){
+                case "1":
+                    rdobtn_a.isChecked();
+                    //radioGroup.check(R.id.rdobtn_a);
+                    break;
+                case "2":
+                    rdobtn_b.isChecked();
+                    //radioGroup.check(R.id.rdobtn_b);
+                    break;
+                case "3":
+                    rdobtn_c.isChecked();
+                    //radioGroup.check(R.id.rdobtn_c);
+                    break;
+                case "4":
+                    rdobtn_d.isChecked();
+                    //radioGroup.check(R.id.rdobtn_d);
+                    break;
+            }
+        }
+        else{
+            userAnswer = "";
+            resetOptions();
+        }
+        Log.e("setQuestion","   setQuestion userAnswer = " + userAnswer);
     }
 
     private void resetOptions() {
@@ -184,13 +211,24 @@ public class RandomExam extends AppCompatActivity {
         rdobtn_b.setChecked(false);
         rdobtn_c.setChecked(false);
         rdobtn_d.setChecked(false);
+        Log.e("saveUserAnswer", "saveUserAnswer  重置");
     }
-
+    private void saveUserAnswer(){
+        if(userAnswer!=null && !userAnswer.equals("")){
+            Log.e("saveUserAnswer","   UserAnswer"+userAnswer);
+            biz.getQuestion().setUserAnswer(userAnswer);
+        }
+    }
     public void nextQuestion(View view) {
+        saveUserAnswer();
+        Toast.makeText(getApplicationContext(), String.valueOf(userAnswer),Toast.LENGTH_SHORT).show();
         setQuestion(biz.nextQuestion());
+
     }
 
     public void preQuestion(View view) {
+        saveUserAnswer();
+        Toast.makeText(getApplicationContext(), String.valueOf(userAnswer),Toast.LENGTH_SHORT).show();
         setQuestion(biz.preQuestion());
     }
 
