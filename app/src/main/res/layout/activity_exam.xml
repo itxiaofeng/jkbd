@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:orientation="vertical"
+        android:visibility="gone"
         android:gravity="center"
         >
         <ProgressBar
@@ -51,6 +52,14 @@
         android:layout_height="5dp"
         android:layout_margin="10dp"
         android:background="#90909090" />
+    <TextView
+        android:id="@+id/txv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9分12秒"
+        android:textColor="#000"
+        android:layout_gravity="center"
+        />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

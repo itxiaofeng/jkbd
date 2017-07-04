@@ -28,6 +28,8 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 import cn.android.jkbd.ExamApplication;
@@ -44,7 +46,7 @@ import cn.android.jkbd.biz.IExamBiz;
 
 public class RandomExam extends AppCompatActivity {
     LinearLayout layoutLoading;
-    TextView txv_examInfo,txv_ques,txv_ans,txv_load;
+    TextView txv_examInfo,txv_ques,txv_ans,txv_load,txv_time;
     ImageView image;
     ProgressBar dialog;
     RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
@@ -76,6 +78,7 @@ public class RandomExam extends AppCompatActivity {
         txv_ques = (TextView) findViewById(R.id.txv_question);
         image = (ImageView) findViewById(R.id.image);
         txv_ans = (TextView) findViewById(R.id.txv_item);
+        txv_time = (TextView) findViewById(R.id.txv_time);
         rdobtn_a = (RadioButton) findViewById(R.id.rdobtn_a);
         rdobtn_b = (RadioButton) findViewById(R.id.rdobtn_b);
         rdobtn_c = (RadioButton) findViewById(R.id.rdobtn_c);
@@ -146,8 +149,10 @@ public class RandomExam extends AppCompatActivity {
                 ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
                 if(examInfo!=null) {
                     txv_examInfo.setText(examInfo.toString());
+                    initTimer(examInfo);
                 }
-                    setQuestion(biz.getQuestion());
+                setQuestion(biz.getQuestion());
+
             }else {
                 layoutLoading.setEnabled(true);
                 dialog.setVisibility(View.GONE);
@@ -157,7 +162,38 @@ public class RandomExam extends AppCompatActivity {
         }
     }
 
-    
+    private void initTimer(ExamInfo examInfo) {
+        int sum = examInfo.getLimitTime()*60*1000;
+        final long endTime = System.currentTimeMillis() + sum;
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                long l = endTime - System.currentTimeMillis();
+                final long min = l/1000/60;
+                final long sec = l/1000%60;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txv_time.setText("剩余时间：" +  min + "分" + sec +"秒");
+                    }
+                });
+            }
+        },0,1000);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        commit(null);
+                    }
+                });
+            }
+        },sum);
+    }
+
 
     protected void setQuestion(Qusetion qusetion) {
         if (qusetion != null) {
