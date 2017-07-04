@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,6 +40,7 @@ import cn.android.jkbd.bean.Qusetion;
 import cn.android.jkbd.bean.Result;
 import cn.android.jkbd.biz.ExamBiz;
 import cn.android.jkbd.biz.IExamBiz;
+import cn.android.jkbd.view.QuestionAdapter;
 
 /**
  * Created by Administrator on 2017/6/29.
@@ -51,6 +53,8 @@ public class RandomExam extends AppCompatActivity {
     ProgressBar dialog;
     RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
     RadioButton[] rdbs = new RadioButton[4];
+    Gallery gallert;
+    QuestionAdapter adapter;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
@@ -83,6 +87,7 @@ public class RandomExam extends AppCompatActivity {
         rdobtn_b = (RadioButton) findViewById(R.id.rdobtn_b);
         rdobtn_c = (RadioButton) findViewById(R.id.rdobtn_c);
         rdobtn_d = (RadioButton) findViewById(R.id.rdobtn_d);
+        gallert = (Gallery) findViewById(R.id.gallery);
         rdbs[0] = rdobtn_a;
         rdbs[1] = rdobtn_b;
         rdbs[2] = rdobtn_c;
@@ -151,6 +156,7 @@ public class RandomExam extends AppCompatActivity {
                     txv_examInfo.setText(examInfo.toString());
                     initTimer(examInfo);
                 }
+                initGallery();
                 setQuestion(biz.getQuestion());
 
             }else {
@@ -160,6 +166,11 @@ public class RandomExam extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void initGallery() {
+        adapter = new QuestionAdapter(this);
+        gallert.setAdapter(adapter);
     }
 
     private void initTimer(ExamInfo examInfo) {
