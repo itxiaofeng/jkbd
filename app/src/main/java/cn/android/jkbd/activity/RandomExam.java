@@ -52,7 +52,6 @@ public class RandomExam extends AppCompatActivity {
     boolean isLoadQuestions = false;
     boolean isLoadExamInfoReceiver = false;
     boolean isLoadQuestionsReceiver = false;
-
     LoadBroadcast mLoadBroadcast;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -147,8 +146,9 @@ public class RandomExam extends AppCompatActivity {
     
 
     protected boolean setQuestion(Qusetion qusetion){
-        if(qusetion!=null){
 
+        if(qusetion!=null){
+            resetOptions();
            txv_ques.setText(biz.getIndex() + 1 +"."+qusetion.getQuestion());
             //这里就是加载图片的代码
            //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
@@ -177,6 +177,13 @@ public class RandomExam extends AppCompatActivity {
             );
         }
         return false;
+    }
+
+    private void resetOptions() {
+        rdobtn_a.setChecked(false);
+        rdobtn_b.setChecked(false);
+        rdobtn_c.setChecked(false);
+        rdobtn_d.setChecked(false);
     }
 
     public void nextQuestion(View view) {
