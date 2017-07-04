@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,14 +46,13 @@ public class RandomExam extends AppCompatActivity {
     ImageView image;
     ProgressBar dialog;
     RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
-    RadioGroup radioGroup;
+    RadioButton[] rdbs = new RadioButton[4];
     IExamBiz biz;
-    String userAnswer="";
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
     boolean isLoadExamInfoReceiver = false;
     boolean isLoadQuestionsReceiver = false;
-
+    String userAnswer = null;
     LoadBroadcast mLoadBroadcast;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,34 +78,16 @@ public class RandomExam extends AppCompatActivity {
         rdobtn_b = (RadioButton) findViewById(R.id.rdobtn_b);
         rdobtn_c = (RadioButton) findViewById(R.id.rdobtn_c);
         rdobtn_d = (RadioButton) findViewById(R.id.rdobtn_d);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        rdbs[0] = rdobtn_a;
+        rdbs[1] = rdobtn_b;
+        rdbs[2] = rdobtn_c;
+        rdbs[3] = rdobtn_d;
         layoutLoading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadData();
             }
         });
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdobtn_a:
-                        userAnswer = "1";
-                    break;
-                    case R.id.rdobtn_b:
-                        userAnswer = "2";
-                        break;
-                    case R.id.rdobtn_c:
-                        userAnswer = "3";
-                        break;
-                    case R.id.rdobtn_d:
-                        userAnswer = "4";;
-                        break;
-                }
-                Log.e("OnCheckedChangeListener","   onCheckedChanged userAnswer = " + userAnswer);
-            }
-        });
-
     }
 
     private void setListener() {
@@ -125,7 +105,37 @@ public class RandomExam extends AppCompatActivity {
                 biz.beginExam();
             }
         }).start();
+        rdobtn_a.setOnCheckedChangeListener(listener);
+        rdobtn_b.setOnCheckedChangeListener(listener);
+        rdobtn_c.setOnCheckedChangeListener(listener);
+        rdobtn_d.setOnCheckedChangeListener(listener);
     }
+    CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if(isChecked==false)
+                    return ;
+            switch (buttonView.getId()){
+                case R.id.rdobtn_a:
+                    userAnswer = "1";
+                    break;
+                case R.id.rdobtn_b:
+                    userAnswer = "2";
+                    break;
+                case R.id.rdobtn_c:
+                    userAnswer = "3";
+                    break;
+                case R.id.rdobtn_d:
+                    userAnswer = "4";
+                    break;
+            }
+            //Log.e("checkedChanged","  userAnswer = " + userAnswer +" ,ischecked = "+ isChecked);
+            if(Integer.valueOf(userAnswer)>0){
+                resetOptions();
+                rdbs[Integer.valueOf(userAnswer) - 1].setChecked(true);
+            }
+        }
+    };
 
     private void initData() {
         if(isLoadExamInfoReceiver && isLoadQuestionsReceiver){
@@ -147,88 +157,62 @@ public class RandomExam extends AppCompatActivity {
 
     
 
-    protected void setQuestion(Qusetion qusetion){
-        if(qusetion!=null){
-           txv_ques.setText(biz.getIndex() + 1 +"."+qusetion.getQuestion());
+    protected void setQuestion(Qusetion qusetion) {
+        if (qusetion != null) {
+            txv_ques.setText(biz.getIndex() + 1 + "." + qusetion.getQuestion());
             //这里就是加载图片的代码
-           //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
-            if(qusetion.getUrl()!=null && !qusetion.getUrl().equals("")){
+            //Glide.with(RandomExam.this).load(qusetion.getUrl()).into(image);
+            if (qusetion.getUrl() != null && !qusetion.getUrl().equals("")) {
                 image.setVisibility(View.VISIBLE);
                 Picasso.with(RandomExam.this).load(qusetion.getUrl()).into(image);
-            }else{
+            } else {
                 image.setVisibility(View.GONE);
             }
-            Log.e("Question" ,"que"+qusetion);
             rdobtn_c.setVisibility(View.GONE);
             rdobtn_d.setVisibility(View.GONE);
-            String c="",d="";
-            if(qusetion.getItem3()!=""){
-                c = "C."+qusetion.getItem3() + "\n";
+            String c = "", d = "";
+            if (qusetion.getItem3() != "") {
+                c = "C." + qusetion.getItem3() + "\n";
                 rdobtn_c.setVisibility(View.VISIBLE);
             }
-            if(qusetion.getItem4()!=""){
-                d = "D."+qusetion.getItem4();
+            if (qusetion.getItem4() != "") {
+                d = "D." + qusetion.getItem4();
                 rdobtn_d.setVisibility(View.VISIBLE);
             }
             txv_ans.setText(
-                    "A."+qusetion.getItem1()+ "\n" +
-                    "B."+qusetion.getItem2()+ "\n" +
-                    c + d
+                    "A." + qusetion.getItem1() + "\n" +
+                            "B." + qusetion.getItem2() + "\n" +
+                            c + d
             );
-        }
-        String userChoice = qusetion.getUserAnswer();
-        Log.e("setQuestion","   setQuestion userChoice = " + userChoice);
-        if(userChoice!=null && !userChoice.equals("")){
-            userAnswer = userChoice;
-            switch (userAnswer){
-                case "1":
-                    rdobtn_a.isChecked();
-                    //radioGroup.check(R.id.rdobtn_a);
-                    break;
-                case "2":
-                    rdobtn_b.isChecked();
-                    //radioGroup.check(R.id.rdobtn_b);
-                    break;
-                case "3":
-                    rdobtn_c.isChecked();
-                    //radioGroup.check(R.id.rdobtn_c);
-                    break;
-                case "4":
-                    rdobtn_d.isChecked();
-                    //radioGroup.check(R.id.rdobtn_d);
-                    break;
+            resetOptions();
+            String userA = qusetion.getUserAnswer();
+            Log.e("setQuestion","   qusetion = "+ qusetion);
+            Log.e("setQuestion","   userA = "+ userA);
+            if(userA!=null && !userA.equals("")){
+                rdbs[Integer.valueOf(userA) - 1].setChecked(true);
             }
         }
-        else{
-            userAnswer = "";
-            resetOptions();
-        }
-        Log.e("setQuestion","   setQuestion userAnswer = " + userAnswer);
     }
-
     private void resetOptions() {
-        rdobtn_a.setChecked(false);
-        rdobtn_b.setChecked(false);
-        rdobtn_c.setChecked(false);
-        rdobtn_d.setChecked(false);
-        Log.e("saveUserAnswer", "saveUserAnswer  重置");
+        for(RadioButton rdb : rdbs){
+            rdb.setChecked(false);
+        }
     }
     private void saveUserAnswer(){
+
         if(userAnswer!=null && !userAnswer.equals("")){
-            Log.e("saveUserAnswer","   UserAnswer"+userAnswer);
             biz.getQuestion().setUserAnswer(userAnswer);
         }
+        userAnswer = "";
     }
     public void nextQuestion(View view) {
         saveUserAnswer();
-        Toast.makeText(getApplicationContext(), String.valueOf(userAnswer),Toast.LENGTH_SHORT).show();
         setQuestion(biz.nextQuestion());
 
     }
 
     public void preQuestion(View view) {
         saveUserAnswer();
-        Toast.makeText(getApplicationContext(), String.valueOf(userAnswer),Toast.LENGTH_SHORT).show();
         setQuestion(biz.preQuestion());
     }
 

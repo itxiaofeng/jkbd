@@ -20,7 +20,7 @@ public class ExamDao implements IExamDao {
         until.url(uri).targetClass(ExamInfo.class).execute(new OkHttpUtils.OnCompleteListener<ExamInfo>() {
             @Override
             public void onSuccess(ExamInfo result) {
-                Log.e("Application","ExamResult="+result);
+                //Log.e("Application","ExamResult="+result);
                 ExamApplication.getInstance().setExamInfo(result);
                 ExamApplication.getInstance().sendBroadcast(new Intent(ExamApplication.LOAD_EXAM_INFO)
                 .putExtra(ExamApplication.LOAD_DATA_EXAM_SUCCESS,true));
@@ -42,7 +42,7 @@ public class ExamDao implements IExamDao {
             @Override
             public void onSuccess(Result result) {
                 boolean success=false;
-                Log.e("Application","Questionresult="+result);
+               //Log.e("Application","Questionresult="+result);
                 if(result!=null && result.getError_code()==0){
                     ExamApplication.getInstance().setExamQueList(result.getResult());
                    success = true;
