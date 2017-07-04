@@ -11,6 +11,6 @@ public interface IExamBiz {
     Qusetion getQuestion();
     Qusetion nextQuestion();
     Qusetion preQuestion();
-    void commitExam();
+    int commitExam();
     int getIndex();
 }

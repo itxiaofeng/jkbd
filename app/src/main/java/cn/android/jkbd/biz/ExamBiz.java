@@ -58,7 +58,17 @@ public class ExamBiz implements IExamBiz {
     }
 
     @Override
-    public void commitExam() {
-
+    public int commitExam() {
+        int sum = 0;
+        for (Qusetion qusetion : list) {
+            String answer = qusetion.getAnswer();
+            String userAns = qusetion.getUserAnswer();
+            if(userAns!=null && !userAns.equals("")){
+                if(userAns.equals(answer)){
+                    sum++;
+                }
+            }
+        }
+        return sum;
     }
 }

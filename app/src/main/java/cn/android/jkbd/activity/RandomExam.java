@@ -2,12 +2,14 @@ package cn.android.jkbd.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -216,6 +218,24 @@ public class RandomExam extends AppCompatActivity {
         setQuestion(biz.preQuestion());
     }
 
+    public void commit(View view) {
+        saveUserAnswer();
+        int sum = biz.commitExam();
+        View inflate = View.inflate(this,R.layout.layour_result,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        TextView txvResult = (TextView)inflate.findViewById(R.id.txv_result);
+        txvResult.setText("你的分数\n" + sum + "分！");
+        builder.setIcon(R.mipmap.exam_commit32x32)
+                .setTitle("交卷")
+                .setView(inflate)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.create().show();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -223,6 +243,7 @@ public class RandomExam extends AppCompatActivity {
             unregisterReceiver(mLoadBroadcast);
         }
     }
+
 
     class LoadBroadcast extends BroadcastReceiver {
         boolean isSuccessExam = false;
