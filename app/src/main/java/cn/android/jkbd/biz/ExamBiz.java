@@ -42,7 +42,7 @@ public class ExamBiz implements IExamBiz {
     @Override
     public Qusetion getQuestion(int mindex) {
         list = ExamApplication.getInstance().getExamQueList();
-
+        index = mindex;
         if(list!=null) {
             return list.get(mindex);
         }else {

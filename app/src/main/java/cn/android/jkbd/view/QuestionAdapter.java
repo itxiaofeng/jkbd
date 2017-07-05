@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import cn.android.jkbd.ExamApplication;
 import cn.android.jkbd.R;
@@ -48,6 +49,13 @@ public class QuestionAdapter extends BaseAdapter {
         View view = View.inflate(context, R.layout.item_question,null);
         TextView txv_no = (TextView) view.findViewById(R.id.txv_no);
         ImageView img_que = (ImageView) view.findViewById(R.id.img_que);
+        String ua = list.get(position).getUserAnswer();
+
+        if(ua!=null && !ua.equals("")){
+            img_que.setImageResource(R.mipmap.answer24x24);
+        }else{
+            img_que.setImageResource(R.mipmap.ques24x24);
+        }
         txv_no.setText("第" + ( position + 1) +"题");
         return view;
     }

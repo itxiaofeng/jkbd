@@ -67,9 +67,9 @@ public class RandomExam extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        initView();
         mLoadBroadcast = new LoadBroadcast();
         biz = new ExamBiz();
+        initView();
         setListener();
         loadData();
     }
@@ -261,6 +261,7 @@ public class RandomExam extends AppCompatActivity {
         if(userAnswer!=null && !userAnswer.equals("")){
             biz.getQuestion().setUserAnswer(userAnswer);
         }
+        adapter.notifyDataSetChanged();
         userAnswer = "";
     }
     public void nextQuestion(View view) {
