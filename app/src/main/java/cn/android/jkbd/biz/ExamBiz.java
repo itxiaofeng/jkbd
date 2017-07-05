@@ -32,13 +32,23 @@ public class ExamBiz implements IExamBiz {
     @Override
     public Qusetion getQuestion() {
         list = ExamApplication.getInstance().getExamQueList();
+
         if(list!=null) {
             return list.get(index);
         }else {
             return null;
         }
     }
+    @Override
+    public Qusetion getQuestion(int mindex) {
+        list = ExamApplication.getInstance().getExamQueList();
 
+        if(list!=null) {
+            return list.get(mindex);
+        }else {
+            return null;
+        }
+    }
     @Override
     public Qusetion nextQuestion() {
         if(list!=null && index<list.size()-1) {

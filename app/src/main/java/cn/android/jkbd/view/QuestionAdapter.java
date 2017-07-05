@@ -1,6 +1,7 @@
 package cn.android.jkbd.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,6 +24,8 @@ public class QuestionAdapter extends BaseAdapter {
     public QuestionAdapter(Context context) {
         this.context = context;
         list = ExamApplication.getInstance().getExamQueList();
+        Log.e("QuestionAdapter"," QuestionAdapter list = " + list);
+        Log.e("QuestionAdapter"," QuestionAdapter list = " + list.size());
     }
 
     @Override
@@ -45,7 +48,7 @@ public class QuestionAdapter extends BaseAdapter {
         View view = View.inflate(context, R.layout.item_question,null);
         TextView txv_no = (TextView) view.findViewById(R.id.txv_no);
         ImageView img_que = (ImageView) view.findViewById(R.id.img_que);
-        txv_no.setText("第" + (position + 1) +"题");
+        txv_no.setText("第" + ( position + 1) +"题");
         return view;
     }
 }

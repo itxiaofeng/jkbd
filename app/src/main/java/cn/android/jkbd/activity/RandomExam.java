@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Gallery;
@@ -171,6 +172,14 @@ public class RandomExam extends AppCompatActivity {
     private void initGallery() {
         adapter = new QuestionAdapter(this);
         gallert.setAdapter(adapter);
+        gallert.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("RamdomExam","initGallery position = "+ position);
+                saveUserAnswer();
+                setQuestion(biz.getQuestion(position));
+            }
+        });
     }
 
     private void initTimer(ExamInfo examInfo) {

@@ -9,6 +9,7 @@ import cn.android.jkbd.bean.Qusetion;
 public interface IExamBiz {
     void beginExam();
     Qusetion getQuestion();
+    Qusetion getQuestion(int index);
     Qusetion nextQuestion();
     Qusetion preQuestion();
     int commitExam();

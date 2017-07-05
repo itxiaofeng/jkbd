@@ -3,12 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/dialog_bg"
-    android:layout_gravity="center"
+    android:gravity="center"
     >
 <TextView
     android:id="@+id/txv_result"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
     android:text="你的分数是\n 90分"
