@@ -244,16 +244,27 @@ public class RandomExam extends AppCompatActivity {
             );
             resetOptions();
             String userA = qusetion.getUserAnswer();
+            String answ = qusetion.getAnswer();
             Log.e("setQuestion","   qusetion = "+ qusetion);
             Log.e("setQuestion","   userA = "+ userA);
             if(userA!=null && !userA.equals("")){
                 rdbs[Integer.valueOf(userA) - 1].setChecked(true);
+                ableOptions(false);
+                if(userA.equals(answ)){}
+            }else{
+                ableOptions(true);
             }
+
         }
     }
     private void resetOptions() {
         for(RadioButton rdb : rdbs){
             rdb.setChecked(false);
+        }
+    }
+    private void ableOptions(boolean bool) {
+        for (RadioButton rdb : rdbs) {
+            rdb.setClickable(bool);
         }
     }
     private void saveUserAnswer(){

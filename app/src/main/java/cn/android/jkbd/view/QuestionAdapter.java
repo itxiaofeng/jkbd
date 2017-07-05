@@ -52,10 +52,14 @@ public class QuestionAdapter extends BaseAdapter {
         String ua = list.get(position).getUserAnswer();
 
         if(ua!=null && !ua.equals("")){
-            img_que.setImageResource(R.mipmap.answer24x24);
-        }else{
+            if(ua.equals(list.get(position).getAnswer())){
+                img_que.setImageResource(R.mipmap.answer24x24);
+            }else{
+                img_que.setImageResource(R.mipmap.error_24px);
+            }
+        }/*else{
             img_que.setImageResource(R.mipmap.ques24x24);
-        }
+        }*/
         txv_no.setText("第" + ( position + 1) +"题");
         return view;
     }

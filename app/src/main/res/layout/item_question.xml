@@ -6,7 +6,7 @@
     android:id="@+id/img_que"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@mipmap/ques24x24"
+    android:src="@mipmap/question_24px"
     android:layout_gravity="center"
     />
     <TextView
