@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -28,7 +27,6 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.android.jkbd.ExamApplication;
 import cn.android.jkbd.R;
 import cn.android.jkbd.bean.ExamInfo;
@@ -53,19 +51,36 @@ public class RandomExam extends AppCompatActivity {
     boolean isLoadQuestionsReceiver = false;
     String userAnswer = null;
     LoadBroadcast mLoadBroadcast;
-    @BindView(R.id.dialog) ProgressBar dialog;
-    @BindView(R.id.txv_load) TextView txv_load;
-    @BindView(R.id.layout_loading) LinearLayout layoutLoading;
-    @BindView(R.id.txv_examInfo) TextView txv_examInfo;
-    @BindView(R.id.txv_time) TextView txv_time;
-    @BindView(R.id.txv_question) TextView txv_ques;
-    @BindView(R.id.image) ImageView image;
-    @BindView(R.id.txv_item) TextView txv_ans;
-    @BindView(R.id.rdobtn_a) RadioButton rdobtn_a;
-    @BindView(R.id.rdobtn_b) RadioButton rdobtn_b;
-    @BindView(R.id.rdobtn_c) RadioButton rdobtn_c;
-    @BindView(R.id.rdobtn_d) RadioButton rdobtn_d;
-    @BindView(R.id.gallery) Gallery gallert;
+    @BindView(R.id.dialog)
+    ProgressBar dialog;
+    @BindView(R.id.txv_load)
+    TextView txv_load;
+    @BindView(R.id.layout_loading)
+    LinearLayout layoutLoading;
+    @BindView(R.id.txv_examInfo)
+    TextView txv_examInfo;
+    @BindView(R.id.txv_time)
+    TextView txv_time;
+    @BindView(R.id.txv_question)
+    TextView txv_ques;
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.txv_item)
+    TextView txv_ans;
+    @BindView(R.id.rdobtn_a)
+    RadioButton rdobtn_a;
+    @BindView(R.id.rdobtn_b)
+    RadioButton rdobtn_b;
+    @BindView(R.id.rdobtn_c)
+    RadioButton rdobtn_c;
+    @BindView(R.id.rdobtn_d)
+    RadioButton rdobtn_d;
+    @BindView(R.id.gallery)
+    Gallery gallert;
+    @BindView(R.id.questionAnswer)
+    TextView txv_questionAnswer;
+    @BindView(R.id.questionExplains)
+    TextView txv_questionExplains;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +100,7 @@ public class RandomExam extends AppCompatActivity {
         rdbs[1] = rdobtn_b;
         rdbs[2] = rdobtn_c;
         rdbs[3] = rdobtn_d;
-       layoutLoading.setOnClickListener(new View.OnClickListener() {
+        layoutLoading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadData();
@@ -133,7 +148,6 @@ public class RandomExam extends AppCompatActivity {
                     userAnswer = "4";
                     break;
             }
-            //Log.e("checkedChanged","  userAnswer = " + userAnswer +" ,ischecked = "+ isChecked);
             if (Integer.valueOf(userAnswer) > 0) {
                 resetOptions();
                 rdbs[Integer.valueOf(userAnswer) - 1].setChecked(true);
@@ -168,7 +182,6 @@ public class RandomExam extends AppCompatActivity {
         gallert.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("RamdomExam", "initGallery position = " + position);
                 saveUserAnswer();
                 setQuestion(biz.getQuestion(position));
             }
@@ -243,8 +256,17 @@ public class RandomExam extends AppCompatActivity {
             if (userA != null && !userA.equals("")) {
                 rdbs[Integer.valueOf(userA) - 1].setChecked(true);
                 ableOptions(false);
-                if (userA.equals(answ)) {
-                }
+                String questionAnswer=null;
+                if(qusetion.getAnswer()=="1")
+                    questionAnswer="A";
+                else if(qusetion.getAnswer()=="2")
+                questionAnswer="B";
+                else if(qusetion.getAnswer()=="3")
+                    questionAnswer="C";
+                else if(qusetion.getAnswer()=="4")
+                    questionAnswer="D";
+                txv_questionAnswer.setText("正确答案："+questionAnswer);
+                txv_questionExplains.setText("答案解析："+qusetion.getExplains());
             } else {
                 ableOptions(true);
             }

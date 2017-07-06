@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:orientation="vertical"
+        android:visibility="gone"
         android:gravity="center"
         >
         <ProgressBar
@@ -170,13 +171,30 @@
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/btn_next"
             android:background="@null"
             android:onClick="commit"
             android:drawableRight="@mipmap/exam_commit32x32"
-            android:text="交卷" />
+            android:text="交卷"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
+
+            <TextView
+                android:id="@+id/questionAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="asdiahuidashduda"
+                android:textColor="#FF0000"
+
+                />
+
+            <TextView
+                android:id="@+id/questionExplains"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="asdasdadasdd"
+                android:textColor="#0000FF"
+                />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
