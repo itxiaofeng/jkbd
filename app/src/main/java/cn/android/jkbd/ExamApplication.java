@@ -1,6 +1,7 @@
 package cn.android.jkbd;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import cn.android.jkbd.bean.Qusetion;
 import cn.android.jkbd.bean.Result;
 import cn.android.jkbd.biz.ExamBiz;
 import cn.android.jkbd.biz.IExamBiz;
+import cn.android.jkbd.dao.ErrorExamHelper;
 import cn.android.jkbd.utils.OkHttpUtils;
 
 /**
@@ -24,10 +26,22 @@ public class ExamApplication extends Application {
     ExamInfo examInfo;
     List<Qusetion> examQueList;
     private static ExamApplication istance;
+    ErrorExamHelper myHelper;
+    SQLiteDatabase db;
 
+    public SQLiteDatabase getDb() {
+
+        return db;
+    }
+    public void  closeDb() {
+        db.close();
+        myHelper.close();
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        myHelper = new ErrorExamHelper(this, "my.db", null, 1);
+        db = myHelper.getWritableDatabase();
         istance=this;
     }
     public static ExamApplication getInstance(){
@@ -44,4 +58,6 @@ public class ExamApplication extends Application {
     public void setExamQueList(List<Qusetion> examQueList) {
         this.examQueList = examQueList;
     }
+
+
 }

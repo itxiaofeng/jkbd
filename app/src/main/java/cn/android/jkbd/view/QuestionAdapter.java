@@ -25,8 +25,6 @@ public class QuestionAdapter extends BaseAdapter {
     public QuestionAdapter(Context context) {
         this.context = context;
         list = ExamApplication.getInstance().getExamQueList();
-        Log.e("QuestionAdapter"," QuestionAdapter list = " + list);
-        Log.e("QuestionAdapter"," QuestionAdapter list = " + list.size());
     }
 
     @Override

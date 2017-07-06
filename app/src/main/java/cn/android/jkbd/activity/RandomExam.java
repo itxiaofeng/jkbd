@@ -31,6 +31,7 @@ import cn.android.jkbd.ExamApplication;
 import cn.android.jkbd.R;
 import cn.android.jkbd.bean.ExamInfo;
 import cn.android.jkbd.bean.Qusetion;
+import cn.android.jkbd.biz.ErrorQues;
 import cn.android.jkbd.biz.ExamBiz;
 import cn.android.jkbd.biz.IExamBiz;
 import cn.android.jkbd.view.QuestionAdapter;
@@ -43,6 +44,7 @@ import cn.android.jkbd.view.QuestionAdapter;
 
 public class RandomExam extends AppCompatActivity {
     RadioButton[] rdbs = new RadioButton[4];
+    ErrorQues errorQues = new ErrorQues();
     QuestionAdapter adapter;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
@@ -213,7 +215,7 @@ public class RandomExam extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        commit(null);
+                        commit();
                     }
                 });
             }
@@ -248,11 +250,16 @@ public class RandomExam extends AppCompatActivity {
                             "B." + qusetion.getItem2() + "\n" +
                             c + d
             );
+
+
             resetOptions();
+            txv_questionAnswer.setText("");
+            txv_questionExplains.setText("");
+
+
+
             String userA = qusetion.getUserAnswer();
             String answ = qusetion.getAnswer();
-            Log.e("setQuestion", "   qusetion = " + qusetion);
-            Log.e("setQuestion", "   userA = " + userA);
             if (userA != null && !userA.equals("")) {
                 rdbs[Integer.valueOf(userA) - 1].setChecked(true);
                 ableOptions(false);
@@ -290,6 +297,9 @@ public class RandomExam extends AppCompatActivity {
 
         if (userAnswer != null && !userAnswer.equals("")) {
             biz.getQuestion().setUserAnswer(userAnswer);
+            if( !biz.getQuestion().getAnswer().equals(userAnswer)){
+                errorQues.insert(biz.getQuestion());
+            }
         }
         ableOptions(false);
         adapter.notifyDataSetChanged();
