@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,39 +20,31 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
-//import com.bumptech.glide.Glide;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.android.jkbd.ExamApplication;
 import cn.android.jkbd.R;
 import cn.android.jkbd.bean.ExamInfo;
 import cn.android.jkbd.bean.Qusetion;
-import cn.android.jkbd.bean.Result;
 import cn.android.jkbd.biz.ExamBiz;
 import cn.android.jkbd.biz.IExamBiz;
 import cn.android.jkbd.view.QuestionAdapter;
+
+//import com.bumptech.glide.Glide;
 
 /**
  * Created by Administrator on 2017/6/29.
  */
 
 public class RandomExam extends AppCompatActivity {
-    LinearLayout layoutLoading;
-    TextView txv_examInfo,txv_ques,txv_ans,txv_load,txv_time;
-    ImageView image;
-    ProgressBar dialog;
-    RadioButton rdobtn_a,rdobtn_b,rdobtn_c,rdobtn_d;
     RadioButton[] rdbs = new RadioButton[4];
-    Gallery gallert;
     QuestionAdapter adapter;
     IExamBiz biz;
     boolean isLoadExamInfo = false;
@@ -63,10 +53,26 @@ public class RandomExam extends AppCompatActivity {
     boolean isLoadQuestionsReceiver = false;
     String userAnswer = null;
     LoadBroadcast mLoadBroadcast;
+    @BindView(R.id.dialog) ProgressBar dialog;
+    @BindView(R.id.txv_load) TextView txv_load;
+    @BindView(R.id.layout_loading) LinearLayout layoutLoading;
+    @BindView(R.id.txv_examInfo) TextView txv_examInfo;
+    @BindView(R.id.txv_time) TextView txv_time;
+    @BindView(R.id.txv_question) TextView txv_ques;
+    @BindView(R.id.image) ImageView image;
+    @BindView(R.id.txv_item) TextView txv_ans;
+    @BindView(R.id.rdobtn_a) RadioButton rdobtn_a;
+    @BindView(R.id.rdobtn_b) RadioButton rdobtn_b;
+    @BindView(R.id.rdobtn_c) RadioButton rdobtn_c;
+    @BindView(R.id.rdobtn_d) RadioButton rdobtn_d;
+    @BindView(R.id.gallery) Gallery gallert;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
+        ButterKnife.bind(this);
+
         mLoadBroadcast = new LoadBroadcast();
         biz = new ExamBiz();
         initView();
@@ -75,25 +81,11 @@ public class RandomExam extends AppCompatActivity {
     }
 
     private void initView() {
-
-        layoutLoading = (LinearLayout) findViewById(R.id.layout_loading);
-        txv_load = (TextView) findViewById(R.id.txv_load);
-        dialog = (ProgressBar) findViewById(R.id.dialog);
-        txv_examInfo = (TextView) findViewById(R.id.txv_examInfo);
-        txv_ques = (TextView) findViewById(R.id.txv_question);
-        image = (ImageView) findViewById(R.id.image);
-        txv_ans = (TextView) findViewById(R.id.txv_item);
-        txv_time = (TextView) findViewById(R.id.txv_time);
-        rdobtn_a = (RadioButton) findViewById(R.id.rdobtn_a);
-        rdobtn_b = (RadioButton) findViewById(R.id.rdobtn_b);
-        rdobtn_c = (RadioButton) findViewById(R.id.rdobtn_c);
-        rdobtn_d = (RadioButton) findViewById(R.id.rdobtn_d);
-        gallert = (Gallery) findViewById(R.id.gallery);
         rdbs[0] = rdobtn_a;
         rdbs[1] = rdobtn_b;
         rdbs[2] = rdobtn_c;
         rdbs[3] = rdobtn_d;
-        layoutLoading.setOnClickListener(new View.OnClickListener() {
+       layoutLoading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadData();
@@ -102,8 +94,8 @@ public class RandomExam extends AppCompatActivity {
     }
 
     private void setListener() {
-        registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_INFO));
-        registerReceiver(mLoadBroadcast,new IntentFilter(ExamApplication.LOAD_EXAM_QUERSTON));
+        registerReceiver(mLoadBroadcast, new IntentFilter(ExamApplication.LOAD_EXAM_INFO));
+        registerReceiver(mLoadBroadcast, new IntentFilter(ExamApplication.LOAD_EXAM_QUERSTON));
     }
 
     private void loadData() {
@@ -121,12 +113,13 @@ public class RandomExam extends AppCompatActivity {
         rdobtn_c.setOnCheckedChangeListener(listener);
         rdobtn_d.setOnCheckedChangeListener(listener);
     }
+
     CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if(isChecked==false)
-                    return ;
-            switch (buttonView.getId()){
+            if (isChecked == false)
+                return;
+            switch (buttonView.getId()) {
                 case R.id.rdobtn_a:
                     userAnswer = "1";
                     break;
@@ -141,7 +134,7 @@ public class RandomExam extends AppCompatActivity {
                     break;
             }
             //Log.e("checkedChanged","  userAnswer = " + userAnswer +" ,ischecked = "+ isChecked);
-            if(Integer.valueOf(userAnswer)>0){
+            if (Integer.valueOf(userAnswer) > 0) {
                 resetOptions();
                 rdbs[Integer.valueOf(userAnswer) - 1].setChecked(true);
             }
@@ -149,18 +142,18 @@ public class RandomExam extends AppCompatActivity {
     };
 
     private void initData() {
-        if(isLoadExamInfoReceiver && isLoadQuestionsReceiver){
-            if(isLoadExamInfo && isLoadQuestions){
-               layoutLoading.setVisibility(View.GONE);
-                ExamInfo examInfo =  ExamApplication.getInstance().getExamInfo();
-                if(examInfo!=null) {
+        if (isLoadExamInfoReceiver && isLoadQuestionsReceiver) {
+            if (isLoadExamInfo && isLoadQuestions) {
+                layoutLoading.setVisibility(View.GONE);
+                ExamInfo examInfo = ExamApplication.getInstance().getExamInfo();
+                if (examInfo != null) {
                     txv_examInfo.setText(examInfo.toString());
                     initTimer(examInfo);
                 }
                 initGallery();
                 setQuestion(biz.getQuestion());
 
-            }else {
+            } else {
                 layoutLoading.setEnabled(true);
                 dialog.setVisibility(View.GONE);
                 txv_load.setText("下载失败，点击页面空白处重新下载！");
@@ -175,7 +168,7 @@ public class RandomExam extends AppCompatActivity {
         gallert.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("RamdomExam","initGallery position = "+ position);
+                Log.e("RamdomExam", "initGallery position = " + position);
                 saveUserAnswer();
                 setQuestion(biz.getQuestion(position));
             }
@@ -183,23 +176,23 @@ public class RandomExam extends AppCompatActivity {
     }
 
     private void initTimer(ExamInfo examInfo) {
-        int sum = examInfo.getLimitTime()*60*1000;
+        int sum = examInfo.getLimitTime() * 60 * 1000;
         final long endTime = System.currentTimeMillis() + sum;
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 long l = endTime - System.currentTimeMillis();
-                final long min = l/1000/60;
-                final long sec = l/1000%60;
+                final long min = l / 1000 / 60;
+                final long sec = l / 1000 % 60;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        txv_time.setText("剩余时间：" +  min + "分" + sec +"秒");
+                        txv_time.setText("剩余时间：" + min + "分" + sec + "秒");
                     }
                 });
             }
-        },0,1000);
+        }, 0, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -211,7 +204,7 @@ public class RandomExam extends AppCompatActivity {
                     }
                 });
             }
-        },sum);
+        }, sum);
     }
 
 
@@ -245,36 +238,41 @@ public class RandomExam extends AppCompatActivity {
             resetOptions();
             String userA = qusetion.getUserAnswer();
             String answ = qusetion.getAnswer();
-            Log.e("setQuestion","   qusetion = "+ qusetion);
-            Log.e("setQuestion","   userA = "+ userA);
-            if(userA!=null && !userA.equals("")){
+            Log.e("setQuestion", "   qusetion = " + qusetion);
+            Log.e("setQuestion", "   userA = " + userA);
+            if (userA != null && !userA.equals("")) {
                 rdbs[Integer.valueOf(userA) - 1].setChecked(true);
                 ableOptions(false);
-                if(userA.equals(answ)){}
-            }else{
+                if (userA.equals(answ)) {
+                }
+            } else {
                 ableOptions(true);
             }
 
         }
     }
+
     private void resetOptions() {
-        for(RadioButton rdb : rdbs){
+        for (RadioButton rdb : rdbs) {
             rdb.setChecked(false);
         }
     }
+
     private void ableOptions(boolean bool) {
         for (RadioButton rdb : rdbs) {
             rdb.setClickable(bool);
         }
     }
-    private void saveUserAnswer(){
 
-        if(userAnswer!=null && !userAnswer.equals("")){
+    private void saveUserAnswer() {
+
+        if (userAnswer != null && !userAnswer.equals("")) {
             biz.getQuestion().setUserAnswer(userAnswer);
         }
         adapter.notifyDataSetChanged();
         userAnswer = "";
     }
+
     public void nextQuestion(View view) {
         saveUserAnswer();
         setQuestion(biz.nextQuestion());
@@ -289,9 +287,9 @@ public class RandomExam extends AppCompatActivity {
     public void commit(View view) {
         saveUserAnswer();
         int sum = biz.commitExam();
-        View inflate = View.inflate(this,R.layout.layour_result,null);
+        View inflate = View.inflate(this, R.layout.layour_result, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        TextView txvResult = (TextView)inflate.findViewById(R.id.txv_result);
+        TextView txvResult = (TextView) inflate.findViewById(R.id.txv_result);
         txvResult.setText("你的分数\n" + sum + "分！");
         builder.setIcon(R.mipmap.exam_commit32x32)
                 .setTitle("交卷")
@@ -304,10 +302,11 @@ public class RandomExam extends AppCompatActivity {
                 });
         builder.create().show();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mLoadBroadcast!=null){
+        if (mLoadBroadcast != null) {
             unregisterReceiver(mLoadBroadcast);
         }
     }
@@ -316,25 +315,26 @@ public class RandomExam extends AppCompatActivity {
     class LoadBroadcast extends BroadcastReceiver {
         boolean isSuccessExam = false;
         boolean isSuccessQuestion = false;
+
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(isSuccessExam!=true){
+            if (isSuccessExam != true) {
                 isSuccessExam = intent.getBooleanExtra(ExamApplication.LOAD_DATA_EXAM_SUCCESS, false);
             }
-            if(isSuccessQuestion!=true){
+            if (isSuccessQuestion != true) {
                 isSuccessQuestion = intent.getBooleanExtra(ExamApplication.LOAD_DATA_QUESTION_SUCCESS, false);
 
             }
-            if(intent.getAction().equals(ExamApplication.LOAD_EXAM_INFO)){
+            if (intent.getAction().equals(ExamApplication.LOAD_EXAM_INFO)) {
                 isLoadExamInfoReceiver = true;
             }
-            if(intent.getAction().equals(ExamApplication.LOAD_EXAM_QUERSTON)){
+            if (intent.getAction().equals(ExamApplication.LOAD_EXAM_QUERSTON)) {
                 isLoadQuestionsReceiver = true;
             }
             Log.e("LoadBroadcast", "isSuccessExam = " + isSuccessExam);
             Log.e("LoadBroadcast", "isSuccessQuestion = " + isSuccessQuestion);
-            Log.e("LoadBroadcast","isLoadQuestionsReceiver = "+isLoadQuestionsReceiver+"   isLoadExamInfoReceiver = "+isLoadExamInfoReceiver);
-            Log.e("intent.getAction()",intent.getAction());
+            Log.e("LoadBroadcast", "isLoadQuestionsReceiver = " + isLoadQuestionsReceiver + "   isLoadExamInfoReceiver = " + isLoadExamInfoReceiver);
+            Log.e("intent.getAction()", intent.getAction());
             if (isSuccessExam) {
                 isLoadExamInfo = true;
             }
