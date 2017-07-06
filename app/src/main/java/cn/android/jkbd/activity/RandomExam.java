@@ -257,13 +257,13 @@ public class RandomExam extends AppCompatActivity {
                 rdbs[Integer.valueOf(userA) - 1].setChecked(true);
                 ableOptions(false);
                 String questionAnswer=null;
-                if(qusetion.getAnswer()=="1")
+                if(qusetion.getAnswer().equals("1"))
                     questionAnswer="A";
-                else if(qusetion.getAnswer()=="2")
+                else if(qusetion.getAnswer().equals("2"))
                 questionAnswer="B";
-                else if(qusetion.getAnswer()=="3")
+                else if(qusetion.getAnswer().equals("3"))
                     questionAnswer="C";
-                else if(qusetion.getAnswer()=="4")
+                else if(qusetion.getAnswer().equals("4"))
                     questionAnswer="D";
                 txv_questionAnswer.setText("正确答案："+questionAnswer);
                 txv_questionExplains.setText("答案解析："+qusetion.getExplains());
@@ -291,6 +291,7 @@ public class RandomExam extends AppCompatActivity {
         if (userAnswer != null && !userAnswer.equals("")) {
             biz.getQuestion().setUserAnswer(userAnswer);
         }
+        ableOptions(false);
         adapter.notifyDataSetChanged();
         userAnswer = "";
     }
@@ -305,8 +306,20 @@ public class RandomExam extends AppCompatActivity {
         saveUserAnswer();
         setQuestion(biz.preQuestion());
     }
-
-    public void commit(View view) {
+    public void commit(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("交卷")
+            .setMessage("你还有剩余时间，是否交卷？")
+            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    commit();
+                }
+            })
+        .setNegativeButton("取消",null);
+        builder.create().show();
+    }
+    public void commit() {
         saveUserAnswer();
         int sum = biz.commitExam();
         View inflate = View.inflate(this, R.layout.layour_result, null);
@@ -322,6 +335,7 @@ public class RandomExam extends AppCompatActivity {
                         finish();
                     }
                 });
+        builder.setCancelable(false);
         builder.create().show();
     }
 
