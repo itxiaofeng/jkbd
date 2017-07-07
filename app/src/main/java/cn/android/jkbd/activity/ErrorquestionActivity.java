@@ -34,6 +34,8 @@ public class ErrorquestionActivity extends ListActivity {
                 new int[]{R.id.txv_question,R.id.image,R.id.txv_item,R.id.questionAnswer,R.id.questionExplains}
         );
         setListAdapter(adapter);
+
+
     }
     private List<Map<String, Object>> getData(){
         ErrorQues errorQues = new ErrorQues();
@@ -79,7 +81,15 @@ public class ErrorquestionActivity extends ListActivity {
                             + c +"\n"
                             + d   ;
                     map.put("txv_item",  item);
-                    map.put("questionAnswer",  cursor.getString(cursor.getColumnIndexOrThrow("answer")));
+                        String s = cursor.getString( cursor.getColumnIndexOrThrow("answer"));
+                    switch (s){
+                        case "1":s="正确答案A";break;
+                        case "2":s="正确答案B";break;
+                        case "3":s="正确答案C";break;
+                        case "4":s="正确答案D";break;
+
+                    }
+                    map.put("questionAnswer",  s);
                     map.put("questionExplains", cursor.getString(cursor.getColumnIndexOrThrow("explains")));
                     list.add(map);
                     cursor.moveToNext();
